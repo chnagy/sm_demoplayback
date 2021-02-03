@@ -1,0 +1,1 @@
+char SERVERURL[] = "http://logochris.de/";
