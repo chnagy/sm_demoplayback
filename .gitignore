@@ -2,3 +2,4 @@
 .vscode/settings.json
 build.sh
 spcomp64
+.vscode/tasks.json

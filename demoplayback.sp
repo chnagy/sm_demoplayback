@@ -1,7 +1,7 @@
 #include <sourcemod>
 #include <cstrike>
 #include <sdktools>
-#include <ripext> 
+#include <ripext>
 #include "botcontrol.sp"
 #include "constants.sp"
 
@@ -162,7 +162,6 @@ public void OnGameFrame() {
 			bots[i].ApplyTick();
 		}
 	}
-	
 }
 
 void GetNextTick() {

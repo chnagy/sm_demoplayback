@@ -38,13 +38,7 @@ methodmap Bot < StringMap {
 	}	
 	
 	public int GivePlayerItem2(int client, const char[] chItem)
-	{	
-		//int entity = GivePlayerItem(iClient, chItem);
-		//CSWeaponID id = CS_AliasToWeaponID(chItem);
-		//int iDef = CS_WeaponIDToItemDefIndex(id);
-		
-		//SetEntProp(entity, Prop_Send, "m_iItemDefinitionIndex", iDef);
-		
+	{		
 		int team = GetClientTeam(client);
 		SetEntProp(client, Prop_Send, "m_iTeamNum", team == 3 ? 2 : 3);
 		int weapon = GivePlayerItem(client, chItem);
@@ -112,8 +106,11 @@ methodmap Bot < StringMap {
 						bool defuser = player.GetBool("hasDefuser");
 						int lifeState = player.GetInt("lifeState");
 						
-						char currWeapon[32];
-						player.GetString("currWeapon", currWeapon, 32);
+
+                        JSONObject currWeaponJSON = view_as<JSONObject>(player.Get("currWeapon"));
+						
+                        char currWeapon[32];
+						currWeaponJSON.GetString("currWeapon", currWeapon, 32);
 						
 						JSONArray weaponsJSON = view_as<JSONArray>(player.Get("weapons"));
 						
@@ -174,6 +171,7 @@ methodmap Bot < StringMap {
 						delete posJSON;
 						delete player; 
 						delete weaponsJSON;
+                        delete currWeaponJSON;
 					}
 					delete team;
 					delete players; 
@@ -254,6 +252,10 @@ methodmap Bot < StringMap {
 							//PrintToServer("keep  %s", weapons[j]);
 							keepWeapons[j] = 1;
 							removeWeapon = 0;
+
+                            if(StrContains(currWeapon, classname) != -1){
+                                SetEntPropEnt(clientID, Prop_Send, "m_hActiveWeapon", item);
+                            }
 						}
 					}			
 					
@@ -275,8 +277,7 @@ methodmap Bot < StringMap {
 					}
 				}
 			}
-						
-			
+            
 			if(lifeState != 0 && IsPlayerAlive(clientID)){
 				ForcePlayerSuicide(clientID);
 			} else if(lifeState == 0 && !IsPlayerAlive(clientID)) {
@@ -297,7 +298,6 @@ methodmap Bot < StringMap {
 			} else {
 				SetEntProp(clientID, Prop_Send, "m_bHasDefuser", 0);
 			}
-		
 
 			SetEntityHealth(clientID, health);
 			SetEntProp(clientID, Prop_Data, "m_ArmorValue", armor);
