@@ -1,1 +1,1 @@
-char SERVERURL[] = "http://logochris.de/demo";
+char SERVERURL[] = "http://logochris.de/";
